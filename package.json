@@ -1,0 +1,16 @@
+{
+  "name": "wetube",
+  "version": "1.0.0",
+  "description": "The best way to watch videos.",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mochafreddo/wetube-reloaded.git"
+  },
+  "author": "Jeongwoo Kim<corc411@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mochafreddo/wetube-reloaded/issues"
+  },
+  "homepage": "https://github.com/mochafreddo/wetube-reloaded#readme"
+}
