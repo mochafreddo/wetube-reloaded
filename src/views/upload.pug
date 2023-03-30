@@ -1,6 +1,6 @@
 extends base.pug
 
 block content
-  form(method='POST')
-    input(placeholder='Title', required, type='text')
-    input(type='sublic', value='Upload Video')
+  form(method='POST', action='/videos/upload')
+    input(placeholder='Title', required, type='text', name='title')
+    input(type='submit', value='Upload Video')
