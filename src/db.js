@@ -3,7 +3,10 @@ import mongoose from 'mongoose';
 mongoose.connect('mongodb://127.0.0.1:27017/wetube', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
+
+  // From mongoose 6.x, it is no longer necessary.
   // useFindAndModify: false,
+  // useCreateIndex: true,
 });
 
 const db = mongoose.connection;
