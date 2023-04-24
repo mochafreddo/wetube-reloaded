@@ -143,9 +143,10 @@ export const postEdit = async (req, res) => {
   const pageTitle = 'Edit Profile';
   const {
     session: {
-      user: { _id },
+      user: { _id, avatarUrl },
     },
     body: { name, email, username, location },
+    file,
   } = req;
 
   const currentUser = req.sesseion.user;
@@ -166,6 +167,7 @@ export const postEdit = async (req, res) => {
   const updateUser = await User.findByIdAndUpdate(
     _id,
     {
+      avatarUrl: file ? file.path : avatarUrl,
       name,
       email,
       username,
@@ -191,9 +193,7 @@ export const postChangePassword = async (req, res) => {
       user: { _id },
     },
     body: { oldPassword, newPassword, newPasswordConfirmation },
-    file,
   } = req;
-  console.log(file);
   const user = await User.findById(_id);
 
   // Output an error message if `oldPassword` is incorrect.
