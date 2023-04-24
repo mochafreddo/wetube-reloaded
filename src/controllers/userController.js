@@ -191,7 +191,9 @@ export const postChangePassword = async (req, res) => {
       user: { _id },
     },
     body: { oldPassword, newPassword, newPasswordConfirmation },
+    file,
   } = req;
+  console.log(file);
   const user = await User.findById(_id);
 
   // Output an error message if `oldPassword` is incorrect.

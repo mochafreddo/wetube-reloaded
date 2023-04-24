@@ -3,9 +3,13 @@ extends base
 block content
   if errorMessage
     span= errorMessage
-  // If you don't enter an action,
-  // the browser will send a POST request to the same URL.
-  form(method='POST')
+
+  // If you don't enter an action, the browser will send a POST request to the 
+  // same URL.
+  // enctype: The encoding type required to send the file to the backend.
+  form(method='POST', enctype='multipart/form-data')
+    label(for='avatar') Avatar
+    input#avatar(type='file', name='avatar', accept='image/*')
     input(
       placeholder='Name',
       name='name',
