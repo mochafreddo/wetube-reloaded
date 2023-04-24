@@ -36,3 +36,6 @@ block content
     )
     // I excluded passwords because some users don't have them.
     input(type='submit', value='Update Profile')
+    if !loggedInUser.socialOnly
+      hr
+      a(href='change-password') Change Password &rarr;
