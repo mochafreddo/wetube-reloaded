@@ -7,7 +7,8 @@
     "url": "git+https://github.com/mochafreddo/wetube-reloaded.git"
   },
   "scripts": {
-    "dev": "nodemon --exec babel-node src/init.js"
+    "dev": "nodemon --exec babel-node src/init.js",
+    "assets": "webpack --config webpack.config.js"
   },
   "author": "Jeongwoo Kim<corc411@gmail.com>",
   "license": "MIT",
@@ -40,6 +41,8 @@
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-promise": "^6.1.1",
     "nodemon": "^2.0.22",
-    "prettier": "^2.8.7"
+    "prettier": "^2.8.7",
+    "webpack": "^5.81.0",
+    "webpack-cli": "^5.0.2"
   }
 }
