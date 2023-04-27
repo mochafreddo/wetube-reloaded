@@ -18,6 +18,11 @@ module.exports = {
           },
         },
       },
+      {
+        test: /\.scss$/,
+        // Write them in reverse order, starting with the last loader.
+        use: ['style-loader', 'css-loader', 'sass-loader'],
+      },
     ],
   },
 };
