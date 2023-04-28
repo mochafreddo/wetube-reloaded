@@ -1,10 +1,11 @@
 import bcrypt from 'bcrypt';
 import User from '../models/User';
-import Video from '../models/Video';
 
 export const getJoin = (req, res) => res.render('join', { pageTitle: 'Join' });
 export const postJoin = async (req, res) => {
-  const { name, username, email, password, password2, location } = req.body;
+  const {
+    name, username, email, password, password2, location,
+  } = req.body;
   const pageTitle = 'Join';
   const exists = await User.exists({ $or: [{ username }, { email }] });
   if (password !== password2) {
@@ -36,8 +37,7 @@ export const postJoin = async (req, res) => {
   }
 };
 
-export const getLogin = (req, res) =>
-  res.render('login', { pageTitle: 'Login' });
+export const getLogin = (req, res) => res.render('login', { pageTitle: 'Login' });
 
 export const postLogin = async (req, res) => {
   const { username, password } = req.body;
@@ -138,15 +138,16 @@ export const logout = (req, res) => {
   req.session.destroy();
   return res.redirect('/');
 };
-export const getEdit = (req, res) =>
-  res.render('edit-profile', { pageTitle: 'Edit Profile' });
+export const getEdit = (req, res) => res.render('edit-profile', { pageTitle: 'Edit Profile' });
 export const postEdit = async (req, res) => {
   const pageTitle = 'Edit Profile';
   const {
     session: {
       user: { _id, avatarUrl },
     },
-    body: { name, email, username, location },
+    body: {
+      name, email, username, location,
+    },
     file,
   } = req;
 
@@ -226,7 +227,13 @@ export const see = async (req, res) => {
   // To make it public, we get the id from `req.params`.
   const { id } = req.params;
 
-  const user = await User.findById(id).populate('videos');
+  const user = await User.findById(id).populate({
+    path: 'videos',
+    populate: {
+      path: 'owner',
+      model: 'User',
+    },
+  });
   if (!user) {
     return res.status(404).render('404', { pageTitle: 'User not found.' });
   }
