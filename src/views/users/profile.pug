@@ -3,7 +3,10 @@ include ../mixins/video
 
 block content
   .profile__data
-    img.avatar(src='/' + user.avatarUrl)
+    if loggedInUser.socialOnly
+      img.avatar(src=user.avatarUrl)
+    else
+      img.avatar(src='/' + user.avatarUrl)
     h3= user.name
   .video-grid
   each video in user.videos 
