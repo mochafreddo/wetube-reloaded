@@ -1,3 +1,5 @@
+import { createFFmpeg, fetchFile } from '@ffmpeg/ffmpeg';
+
 const startBtn = document.getElementById('startBtn');
 const video = document.getElementById('preview');
 
@@ -5,7 +7,20 @@ let stream;
 let recorder;
 let videoFile;
 
-const handleDownload = () => {
+const handleDownload = async () => {
+  const ffmpeg = createFFmpeg({ log: true });
+  await ffmpeg.load();// ffmpeg를 로드하는데 시간이 걸릴 수 있으므로 await를 사용하여 로드가 완료될 때까지 기다립니다.
+
+  // ffmpeg는 브라우저에서 동작하는 것이 아니므로, 브라우저에서 사용할 수 있도록 wasm 파일을 다운로드 받아야 합니다.
+  // fetchFile() 함수는 URL을 받아서 fetch() 함수를 사용하여 파일을 다운로드 받습니다.
+  // fetch() 함수는 Promise를 반환하므로 await를 사용하여 파일 다운로드가 완료될 때까지 기다립니다.
+  // fetchFile() 함수는 Uint8Array를 반환하므로, 이를 ffmpeg에 전달하기 위해 Uint8Array를 Blob으로 변환합니다.
+  ffmpeg.FS('writeFile', 'recording.webm', await fetchFile(videoFile));
+
+  // -i 옵션은 입력 파일을 지정합니다.
+  // -r 옵션은 출력 파일의 프레임 레이트를 지정합니다.
+  await ffmpeg.run('-i', 'recording.webm', '-r', '60', 'output.mp4');
+
   const a = document.createElement('a');
   a.href = videoFile;
   // download 속성은 a 요소가 리소스를 다운로드할 때 사용할 파일 이름을 나타냅니다.
