@@ -8,6 +8,7 @@ const videoSchema = new mongoose.Schema({
     maxLength: 80,
   },
   fileUrl: { type: String, required: true },
+  thumbUrl: { type: String, required: true },
   description: {
     type: String,
     required: true,
@@ -28,9 +29,7 @@ const videoSchema = new mongoose.Schema({
   },
 });
 
-videoSchema.static('formatHashtags', (hashtags) =>
-  hashtags.split(',').map((word) => (word.startsWith('#') ? word : `#${word}`)),
-);
+videoSchema.static('formatHashtags', (hashtags) => hashtags.split(',').map((word) => (word.startsWith('#') ? word : `#${word}`)));
 
 const Video = mongoose.model('Video', videoSchema);
 
