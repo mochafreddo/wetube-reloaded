@@ -19,13 +19,23 @@ const handleDownload = async () => {
 
   // -i 옵션은 입력 파일을 지정합니다.
   // -r 옵션은 출력 파일의 프레임 레이트를 지정합니다.
-  await ffmpeg.run('-i', 'recording.webm', '-r', '60', 'output.mp4');
+  await ffmpeg.run('-i', 'recording.webm', '-r', '60', 'output.mp4');// 녹화된 비디오를 mp4로 변환
 
+  // -ss 옵션은 입력 파일의 시작 시간을 지정합니다.
+  // -frames:v 옵션은 출력 파일의 프레임 수를 지정합니다.
+  await ffmpeg.run('-i', 'recording.webm', '-ss', '00:00:01', '-frames:v', '1', 'thumbnail.jpg');// 썸네일 생성
+
+  // 파일을 읽어서 Uint8Array로 반환합니다.
   const mp4File = ffmpeg.FS('readFile', 'output.mp4');
+  const thumbFile = ffmpeg.FS('readFile', 'thumbnail.jpg');
 
+  // Uint8Array를 Blob으로 변환합니다.
   const mp4Blob = new Blob([mp4File.buffer], { type: 'video/mp4' });
+  const thumbBlob = new Blob([thumbFile.buffer], { type: 'image/jpg' });
 
+  // Blob을 URL로 변환합니다.
   const mp4Url = URL.createObjectURL(mp4Blob);
+  const thumbUrl = URL.createObjectURL(thumbBlob);
 
   const a = document.createElement('a');
   a.href = mp4Url;
@@ -35,6 +45,12 @@ const handleDownload = async () => {
   a.download = 'MyRecording.mp4';
   document.body.appendChild(a);
   a.click();
+
+  const thumbA = document.createElement('a');
+  thumbA.href = thumbUrl;
+  thumbA.download = 'MyThumbnail.jpg';
+  document.body.appendChild(thumbA);
+  thumbA.click();
 };
 
 const handleStop = () => {
