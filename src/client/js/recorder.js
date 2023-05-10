@@ -21,12 +21,18 @@ const handleDownload = async () => {
   // -r 옵션은 출력 파일의 프레임 레이트를 지정합니다.
   await ffmpeg.run('-i', 'recording.webm', '-r', '60', 'output.mp4');
 
+  const mp4File = ffmpeg.FS('readFile', 'output.mp4');
+
+  const mp4Blob = new Blob([mp4File.buffer], { type: 'video/mp4' });
+
+  const mp4Url = URL.createObjectURL(mp4Blob);
+
   const a = document.createElement('a');
-  a.href = videoFile;
+  a.href = mp4Url;
   // download 속성은 a 요소가 리소스를 다운로드할 때 사용할 파일 이름을 나타냅니다.
   // 이 속성은 href 또는 location 속성이 지정된 경우에만 사용할 수 있습니다.
   // 이 속성이 지정되지 않으면, 리소스의 URL이 사용됩니다.
-  a.download = 'MyRecording.webm';
+  a.download = 'MyRecording.mp4';
   document.body.appendChild(a);
   a.click();
 };
