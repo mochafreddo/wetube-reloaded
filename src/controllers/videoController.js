@@ -128,6 +128,6 @@ export const registerView = async (req, res) => {
 
 export const createComment = async (req, res) => {
   console.log(req.params);
-  console.log(req.body);
+  console.log(req.body.text);
   return res.end();
 };
