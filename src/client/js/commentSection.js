@@ -19,12 +19,15 @@
     const videoId = videoContainer.dataset.id;
 
     try {
-      const response = await fetch(`/api/videos/${videoId}/comments/${commentId}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
+      const response = await fetch(
+        `/api/videos/${videoId}/comments/${commentId}`,
+        {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
         },
-      });
+      );
 
       if (response.ok) {
         target.parentElement.remove();

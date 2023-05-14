@@ -3,9 +3,7 @@ import User from '../models/User';
 
 export const getJoin = (req, res) => res.render('join', { pageTitle: 'Join' });
 export const postJoin = async (req, res) => {
-  const {
-    name, username, email, password, password2, location,
-  } = req.body;
+  const { name, username, email, password, password2, location } = req.body;
   const pageTitle = 'Join';
   const exists = await User.exists({ $or: [{ username }, { email }] });
   if (password !== password2) {
@@ -37,7 +35,8 @@ export const postJoin = async (req, res) => {
   }
 };
 
-export const getLogin = (req, res) => res.render('login', { pageTitle: 'Login' });
+export const getLogin = (req, res) =>
+  res.render('login', { pageTitle: 'Login' });
 
 export const postLogin = async (req, res) => {
   const { username, password } = req.body;
@@ -136,19 +135,17 @@ export const finishGithubLogin = async (req, res) => {
 
 export const logout = (req, res) => {
   req.session.destroy();
-  req.flash('info', 'Bye Bye');
   return res.redirect('/');
 };
-export const getEdit = (req, res) => res.render('edit-profile', { pageTitle: 'Edit Profile' });
+export const getEdit = (req, res) =>
+  res.render('edit-profile', { pageTitle: 'Edit Profile' });
 export const postEdit = async (req, res) => {
   const pageTitle = 'Edit Profile';
   const {
     session: {
       user: { _id, avatarUrl },
     },
-    body: {
-      name, email, username, location,
-    },
+    body: { name, email, username, location },
     file,
   } = req;
 
