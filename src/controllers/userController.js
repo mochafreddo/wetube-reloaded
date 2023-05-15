@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';
 import User from '../models/User';
 
 export const getJoin = (req, res) => res.render('join', { pageTitle: 'Join' });
+
 export const postJoin = async (req, res) => {
   const { name, username, email, password, password2, location } = req.body;
   const pageTitle = 'Join';
@@ -134,11 +135,14 @@ export const finishGithubLogin = async (req, res) => {
 };
 
 export const logout = (req, res) => {
+  req.flash('info', 'Bye Bye');
   req.session.destroy();
   return res.redirect('/');
 };
+
 export const getEdit = (req, res) =>
   res.render('edit-profile', { pageTitle: 'Edit Profile' });
+
 export const postEdit = async (req, res) => {
   const pageTitle = 'Edit Profile';
   const {
