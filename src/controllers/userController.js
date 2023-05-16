@@ -136,7 +136,7 @@ export const finishGithubLogin = async (req, res) => {
 
 export const logout = (req, res) => {
   req.flash('info', 'Bye Bye');
-  req.session.destroy();
+  req.session.user = null;
   return res.redirect('/');
 };
 
@@ -171,7 +171,7 @@ export const postEdit = async (req, res) => {
   const updateUser = await User.findByIdAndUpdate(
     _id,
     {
-      avatarUrl: file ? file.path : avatarUrl,
+      avatarUrl: file ? file.location : avatarUrl,
       name,
       email,
       username,

@@ -16,12 +16,10 @@ export const home = async (req, res) => {
     return res.render('home', { pageTitle: 'Home', videos });
   } catch (error) {
     console.error('Error fetching videos:', error);
-    return res
-      .status(500)
-      .render('error', {
-        pageTitle: 'Error',
-        errorMessage: 'Failed to fetch videos.',
-      });
+    return res.status(500).render('error', {
+      pageTitle: 'Error',
+      errorMessage: 'Failed to fetch videos.',
+    });
   }
 };
 
@@ -43,12 +41,10 @@ export const watch = async (req, res) => {
     return res.render('watch', { pageTitle: video.title, video });
   } catch (error) {
     console.error('Error fetching video:', error);
-    return res
-      .status(500)
-      .render('error', {
-        pageTitle: 'Error',
-        errorMessage: 'Failed to fetch video.',
-      });
+    return res.status(500).render('error', {
+      pageTitle: 'Error',
+      errorMessage: 'Failed to fetch video.',
+    });
   }
 };
 
@@ -75,12 +71,10 @@ export const getEdit = async (req, res) => {
     return res.render('edit', { pageTitle: `Edit: ${video.title}`, video });
   } catch (error) {
     console.error('Error fetching video for editing:', error);
-    return res
-      .status(500)
-      .render('error', {
-        pageTitle: 'Error',
-        errorMessage: 'Failed to fetch video for editing.',
-      });
+    return res.status(500).render('error', {
+      pageTitle: 'Error',
+      errorMessage: 'Failed to fetch video for editing.',
+    });
   }
 };
 
@@ -113,12 +107,10 @@ export const postEdit = async (req, res) => {
     req.flash('success', 'Changes saved.');
     return res.redirect(`/videos/${id}`);
   } catch (error) {
-    return res
-      .status(500)
-      .render('error', {
-        pageTitle: 'Error',
-        errorMessage: 'Failed to update video.',
-      });
+    return res.status(500).render('error', {
+      pageTitle: 'Error',
+      errorMessage: 'Failed to update video.',
+    });
   }
 };
 
@@ -147,8 +139,8 @@ export const postUpload = async (req, res) => {
     const newVideo = await Video.create({
       title,
       description,
-      fileUrl: video[0].path,
-      thumbUrl: thumb[0].path,
+      fileUrl: video[0].location,
+      thumbUrl: thumb[0].location,
       owner: _id,
       hashtags: Video.formatHashtags(hashtags),
     });
@@ -188,12 +180,10 @@ export const deleteVideo = async (req, res) => {
     return res.redirect('/');
   } catch (error) {
     console.error('Error deleting video:', error);
-    return res
-      .status(500)
-      .render('error', {
-        pageTitle: 'Error',
-        errorMessage: 'Failed to delete video.',
-      });
+    return res.status(500).render('error', {
+      pageTitle: 'Error',
+      errorMessage: 'Failed to delete video.',
+    });
   }
 };
 
@@ -217,12 +207,10 @@ export const search = async (req, res) => {
     return res.render('search', { pageTitle: 'Search', videos });
   } catch (error) {
     console.error('Error searching for videos:', error);
-    return res
-      .status(500)
-      .render('error', {
-        pageTitle: 'Error',
-        errorMessage: 'Failed to search for videos.',
-      });
+    return res.status(500).render('error', {
+      pageTitle: 'Error',
+      errorMessage: 'Failed to search for videos.',
+    });
   }
 };
 
