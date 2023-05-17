@@ -173,11 +173,10 @@ export const postEdit = async (req, res) => {
     });
   }
 
-  const isProduction = process.env.NODE_ENV === 'production';
   const updateUser = await User.findByIdAndUpdate(
     _id,
     {
-      avatarUrl: file ? (isProduction ? file.location : file.path) : avatarUrl,
+      avatarUrl: file ? req.filePath(file) : avatarUrl,
       name,
       email,
       username,
