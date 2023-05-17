@@ -7,23 +7,19 @@ import rootRouter from './routers/rootRouter';
 import videoRouter from './routers/videoRouter';
 import userRouter from './routers/userRouter';
 import apiRouter from './routers/apiRouter';
-import { localsMiddleware } from './middlewares';
+import { localsMiddleware, setFilePathMiddleware } from './middlewares';
 
 const app = express();
-const logger = morgan('dev');
 
-app.set('view engine', 'pug');
-app.set('views', `${process.cwd()}/src/views`);
-app.use(logger);
+// 1. Middleware setup
+app.use(morgan('dev')); // logger
+app.use(express.urlencoded({ extended: true })); // parse Request Object as strings or arrays
+app.use(express.json()); // parse Request Object as a JSON Object
+app.use(flash());
+app.use(localsMiddleware);
+app.use(setFilePathMiddleware);
 
-// express.urlencoded() is a method inbuilt in express to recognize the incoming Request Object as
-// strings or arrays.
-app.use(express.urlencoded({ extended: true }));
-
-// express.json() is a method inbuilt in express to recognize the incoming Request Object as a JSON
-//  Object.
-app.use(express.json());
-
+// 2. Session setup
 app.use(
   session({
     secret: process.env.COOKIE_SECRET,
@@ -35,19 +31,23 @@ app.use(
     }),
   }),
 );
-app.use(flash());
-app.use(localsMiddleware);
 
-// 크로스 오리진 정책: 코드가 크로스 오리진 환경에서 실행되는 경우, SharedArrayBuffer의 사용이 제한될 수 있습니다.
-// 크로스 오리진 요청에 대한 액세스를 허용하는 CORS (Cross-Origin Resource Sharing) 정책을 설정해야 할 수도 있습니다.
+// 3. CORS headers setup
 app.use((req, res, next) => {
   res.header('Cross-Origin-Embedder-Policy', 'credentialless');
   res.header('Cross-Origin-Resource-Policy', 'cross-origin');
   next();
 });
 
+// 4. Static assets setup
 app.use('/uploads', express.static('uploads'));
 app.use('/static', express.static('assets'));
+
+// 5. View engine setup
+app.set('view engine', 'pug');
+app.set('views', `${process.cwd()}/src/views`);
+
+// 6. Routing
 app.use('/', rootRouter);
 app.use('/videos', videoRouter);
 app.use('/users', userRouter);
