@@ -1,30 +1,38 @@
 import multer from 'multer';
 import multerS3 from 'multer-s3';
 
-var AWS = require('aws-sdk'); // Load the SDK for Javascript
-AWS.config.update({ region: 'us-east-1' }); // Set the Region
-
-// Create S3 service object
-const s3 = new AWS.S3({
-  apiVersion: '2006-03-01',
-  credentials: {
-    accessKeyId: process.env.AWS_ID,
-    secretAccessKey: process.env.AWS_SECRET,
-  },
+import { S3Client } from '@aws-sdk/client-s3';
+// Set the Region
+const REGION = 'us-east-1';
+// Create an Amazon S3 service client object.
+const s3Client = new S3Client({
+  region: REGION,
 });
 
 const isProduction = process.env.NODE_ENV === 'production';
 
 const s3ImageUploader = multerS3({
-  s3: s3,
-  bucket: 'wetube-y8rv/images',
+  s3: s3Client,
+  bucket: 'wetube-y8rv',
   acl: 'public-read',
+  metadata: function (req, file, cb) {
+    cb(null, { fieldName: file.fieldname });
+  },
+  key: function (req, file, cb) {
+    cb(null, `images/${Date.now().toString()}`);
+  },
 });
 
 const s3VideoUploader = multerS3({
-  s3: s3,
-  bucket: 'wetube-y8rv/videos',
+  s3: s3Client,
+  bucket: 'wetube-y8rv',
   acl: 'public-read',
+  metadata: function (req, file, cb) {
+    cb(null, { fieldName: file.fieldname });
+  },
+  key: function (req, file, cb) {
+    cb(null, `videos/${Date.now().toString()}`);
+  },
 });
 
 export const localsMiddleware = (req, res, next) => {
