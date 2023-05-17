@@ -1,7 +1,9 @@
 mixin video(video)
+  - let imageUrl = isProduction ? video.thumbUrl : '/' + video.thumbUrl;
+
   a.video-mixin(href=`/videos/${video.id}`)
     img.video-mixin__thumb(
-      style=`background-image:url(${video.thumbUrl});background-size:cover;background-position:center;`,
+      style=`background-image:url(${imageUrl});background-size:cover;background-position:center;`,
       crossorigin='anonymous'
     )
     .video-mixin__data
