@@ -16,8 +16,6 @@ app.use(morgan('dev')); // logger
 app.use(express.urlencoded({ extended: true })); // parse Request Object as strings or arrays
 app.use(express.json()); // parse Request Object as a JSON Object
 app.use(flash());
-app.use(localsMiddleware);
-app.use(setFilePathMiddleware);
 
 // 2. Session setup
 app.use(
@@ -31,6 +29,10 @@ app.use(
     }),
   }),
 );
+
+// Use middleware that depends on session after session setup
+app.use(localsMiddleware);
+app.use(setFilePathMiddleware);
 
 // 3. CORS headers setup
 app.use((req, res, next) => {
