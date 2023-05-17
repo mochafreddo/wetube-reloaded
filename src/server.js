@@ -41,8 +41,7 @@ app.use(localsMiddleware);
 // 크로스 오리진 정책: 코드가 크로스 오리진 환경에서 실행되는 경우, SharedArrayBuffer의 사용이 제한될 수 있습니다.
 // 크로스 오리진 요청에 대한 액세스를 허용하는 CORS (Cross-Origin Resource Sharing) 정책을 설정해야 할 수도 있습니다.
 app.use((req, res, next) => {
-  res.header('Cross-Origin-Embedder-Policy', 'require-corp');
-  // res.header('Cross-Origin-Opener-Policy', 'cross-origin');
+  res.header('Cross-Origin-Embedder-Policy', 'credentialless');
   res.header('Cross-Origin-Resource-Policy', 'cross-origin');
   next();
 });
