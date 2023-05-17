@@ -5,7 +5,7 @@ var AWS = require('aws-sdk'); // Load the SDK for Javascript
 AWS.config.update({ region: 'us-east-1' }); // Set the Region
 
 // Create S3 service object
-const s3 = new aws.S3({
+const s3 = new AWS.S3({
   apiVersion: '2006-03-01',
   credentials: {
     accessKeyId: process.env.AWS_ID,
