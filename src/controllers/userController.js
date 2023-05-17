@@ -157,7 +157,7 @@ export const postEdit = async (req, res) => {
     file,
   } = req;
 
-  const currentUser = req.sesseion.user;
+  const currentUser = req.session.user;
 
   if (currentUser.email !== email && (await User.exists({ email }))) {
     return res.status(400).render('edit-profile', {
