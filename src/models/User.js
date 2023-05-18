@@ -2,7 +2,12 @@ import bcrypt from 'bcrypt';
 import mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema({
-  email: { type: String, required: true, unique: true },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    match: [/^\S+@\S+\.\S+$/, 'Please use a valid email address.'],
+  },
   avatarUrl: String,
   socialOnly: { type: Boolean, default: false },
   username: { type: String, required: true, unique: true },
@@ -13,9 +18,15 @@ const userSchema = new mongoose.Schema({
   videos: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Video' }],
 });
 
-userSchema.pre('save', async function () {
-  if (this.isModified('password')) {
-    this.password = await bcrypt.hash(this.password, 5);
+const SALT_ROUNDS = parseInt(process.env.SALT_ROUNDS) || 10;
+
+userSchema.pre('save', async function (next) {
+  try {
+    if (this.isModified('password')) {
+      this.password = await bcrypt.hash(this.password, SALT_ROUNDS);
+    }
+  } catch (error) {
+    next(error);
   }
 });
 
