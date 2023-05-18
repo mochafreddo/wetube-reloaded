@@ -2,7 +2,10 @@ extends base
 
 block content
   #videoContainer(data-id=video._id)
-    video(src=video.fileUrl, crossorigin)
+    if isProduction
+      video(src=video.fileUrl, crossorigin)
+    else
+      video(src='/' + video.fileUrl)
     #videoControls.videoControls
       .videoControls__play
         span#play.videoControls__playBtn
