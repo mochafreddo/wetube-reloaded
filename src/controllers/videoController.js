@@ -1,6 +1,6 @@
-import Video from '../models/Video';
-import Comment from '../models/Comment';
-import User from '../models/User';
+import Video from "../models/Video";
+import Comment from "../models/Comment";
+import User from "../models/User";
 
 /**
  * home - Renders the home page with a list of videos.
@@ -11,14 +11,14 @@ import User from '../models/User';
 export const home = async (req, res) => {
   try {
     const videos = await Video.find({})
-      .sort({ createdAt: 'desc' })
-      .populate('owner');
-    return res.render('home', { pageTitle: 'Home', videos });
+      .sort({ createdAt: "desc" })
+      .populate("owner");
+    return res.render("home", { pageTitle: "Home", videos });
   } catch (error) {
-    console.error('Error fetching videos:', error);
-    return res.status(500).render('error', {
-      pageTitle: 'Error',
-      errorMessage: 'Failed to fetch videos.',
+    console.error("Error fetching videos:", error);
+    return res.status(500).render("error", {
+      pageTitle: "Error",
+      errorMessage: "Failed to fetch videos.",
     });
   }
 };
@@ -33,17 +33,17 @@ export const watch = async (req, res) => {
   const { id } = req.params;
   try {
     const video = await Video.findById(id)
-      .populate('owner')
-      .populate('comments');
+      .populate("owner")
+      .populate("comments");
     if (!video) {
-      return res.status(404).render('404', { pageTitle: 'Video not found.' });
+      return res.status(404).render("404", { pageTitle: "Video not found." });
     }
-    return res.render('watch', { pageTitle: video.title, video });
+    return res.render("watch", { pageTitle: video.title, video });
   } catch (error) {
-    console.error('Error fetching video:', error);
-    return res.status(500).render('error', {
-      pageTitle: 'Error',
-      errorMessage: 'Failed to fetch video.',
+    console.error("Error fetching video:", error);
+    return res.status(500).render("error", {
+      pageTitle: "Error",
+      errorMessage: "Failed to fetch video.",
     });
   }
 };
@@ -62,18 +62,18 @@ export const getEdit = async (req, res) => {
   try {
     const video = await Video.findById(id);
     if (!video) {
-      return res.status(404).render('404', { pageTitle: 'Video not found.' });
+      return res.status(404).render("404", { pageTitle: "Video not found." });
     }
     if (String(video.owner) !== String(_id)) {
-      req.flash('error', 'Not authorized');
-      return res.status(403).redirect('/');
+      req.flash("error", "Not authorized");
+      return res.status(403).redirect("/");
     }
-    return res.render('edit', { pageTitle: `Edit: ${video.title}`, video });
+    return res.render("edit", { pageTitle: `Edit: ${video.title}`, video });
   } catch (error) {
-    console.error('Error fetching video for editing:', error);
-    return res.status(500).render('error', {
-      pageTitle: 'Error',
-      errorMessage: 'Failed to fetch video for editing.',
+    console.error("Error fetching video for editing:", error);
+    return res.status(500).render("error", {
+      pageTitle: "Error",
+      errorMessage: "Failed to fetch video for editing.",
     });
   }
 };
@@ -93,23 +93,23 @@ export const postEdit = async (req, res) => {
   try {
     const video = await Video.findById(id);
     if (!video) {
-      return res.status(404).render('404', { pageTitle: 'Video not found.' });
+      return res.status(404).render("404", { pageTitle: "Video not found." });
     }
     if (String(video.owner) !== String(_id)) {
-      req.flash('error', 'You are not the owner of the video.');
-      return res.status(403).redirect('/');
+      req.flash("error", "You are not the owner of the video.");
+      return res.status(403).redirect("/");
     }
     await Video.findByIdAndUpdate(id, {
       title,
       description,
       hashtags: Video.formatHashtags(hashtags),
     });
-    req.flash('success', 'Changes saved.');
+    req.flash("success", "Changes saved.");
     return res.redirect(`/videos/${id}`);
   } catch (error) {
-    return res.status(500).render('error', {
-      pageTitle: 'Error',
-      errorMessage: 'Failed to update video.',
+    return res.status(500).render("error", {
+      pageTitle: "Error",
+      errorMessage: "Failed to update video.",
     });
   }
 };
@@ -121,7 +121,7 @@ export const postEdit = async (req, res) => {
  * @param {object} res - The response object.
  */
 export const getUpload = (req, res) =>
-  res.render('upload', { pageTitle: 'Upload Video' });
+  res.render("upload", { pageTitle: "Upload Video" });
 
 /**
  * postUpload - Processes the submitted form for uploading a video.
@@ -135,7 +135,7 @@ export const postUpload = async (req, res) => {
   } = req.session;
   const { video, thumb } = req.files;
   const { title, description, hashtags } = req.body;
-  const isProduction = process.env.NODE_ENV === 'production';
+  const isProduction = process.env.NODE_ENV === "production";
   try {
     const newVideo = await Video.create({
       title,
@@ -148,11 +148,11 @@ export const postUpload = async (req, res) => {
     const user = await User.findById(_id);
     user.videos.push(newVideo._id);
     user.save();
-    return res.redirect('/');
+    return res.redirect("/");
   } catch (error) {
-    console.error('Error uploading video:', error);
-    return res.status(400).render('upload', {
-      pageTitle: 'Upload Video',
+    console.error("Error uploading video:", error);
+    return res.status(400).render("upload", {
+      pageTitle: "Upload Video",
       errorMessage: error._message,
     });
   }
@@ -172,18 +172,18 @@ export const deleteVideo = async (req, res) => {
   try {
     const video = await Video.findById(id);
     if (!video) {
-      return res.status(404).render('404', { pageTitle: 'Video not found.' });
+      return res.status(404).render("404", { pageTitle: "Video not found." });
     }
     if (String(video.owner) !== String(_id)) {
-      return res.status(403).redirect('/');
+      return res.status(403).redirect("/");
     }
     await Video.findByIdAndDelete(id);
-    return res.redirect('/');
+    return res.redirect("/");
   } catch (error) {
-    console.error('Error deleting video:', error);
-    return res.status(500).render('error', {
-      pageTitle: 'Error',
-      errorMessage: 'Failed to delete video.',
+    console.error("Error deleting video:", error);
+    return res.status(500).render("error", {
+      pageTitle: "Error",
+      errorMessage: "Failed to delete video.",
     });
   }
 };
@@ -201,16 +201,16 @@ export const search = async (req, res) => {
     if (keyword) {
       videos = await Video.find({
         title: {
-          $regex: new RegExp(`${keyword}$`, 'i'),
+          $regex: new RegExp(`${keyword}`, "i"),
         },
-      }).populate('owner');
+      }).populate("owner");
     }
-    return res.render('search', { pageTitle: 'Search', videos });
+    return res.render("search", { pageTitle: "Search", videos });
   } catch (error) {
-    console.error('Error searching for videos:', error);
-    return res.status(500).render('error', {
-      pageTitle: 'Error',
-      errorMessage: 'Failed to search for videos.',
+    console.error("Error searching for videos:", error);
+    return res.status(500).render("error", {
+      pageTitle: "Error",
+      errorMessage: "Failed to search for videos.",
     });
   }
 };
@@ -232,7 +232,7 @@ export const registerView = async (req, res) => {
     await video.save();
     return res.sendStatus(200);
   } catch (error) {
-    console.error('Error registering view:', error);
+    console.error("Error registering view:", error);
     return res.sendStatus(500);
   }
 };
@@ -265,7 +265,7 @@ export const createComment = async (req, res) => {
     await video.save();
     return res.status(201).json({ newCommentId: comment._id });
   } catch (error) {
-    console.error('Error creating comment:', error);
+    console.error("Error creating comment:", error);
     return res.sendStatus(500);
   }
 };
@@ -288,7 +288,7 @@ export const deleteComment = async (req, res) => {
     // 없으면 404 상태 코드와 함께 에러 메시지를 반환합니다.
     const comment = await Comment.findById(commentId);
     if (!comment) {
-      return res.status(404).json({ message: 'Comment not found.' });
+      return res.status(404).json({ message: "Comment not found." });
     }
 
     // 댓글의 작성자와 현재 사용자를 비교하여 권한이 있는지 확인합니다.
@@ -296,7 +296,7 @@ export const deleteComment = async (req, res) => {
     if (String(comment.owner) !== String(_id)) {
       return res
         .status(403)
-        .json({ message: 'Not authorized to delete this comment.' });
+        .json({ message: "Not authorized to delete this comment." });
     }
 
     // 1. `Video.updateOne()`: Mongoose를 사용하여 데이터베이스를 저장된 Video 모델의 문서를 업데이트합니다. 이 메서드는 첫 번째 인자로
@@ -315,7 +315,7 @@ export const deleteComment = async (req, res) => {
 
     return res.sendStatus(200);
   } catch (error) {
-    console.error('Error deleting comment:', error);
-    return res.status(500).json({ message: 'Failed to delete comment.' });
+    console.error("Error deleting comment:", error);
+    return res.status(500).json({ message: "Failed to delete comment." });
   }
 };
